@@ -86,7 +86,12 @@ export function History({ runs }: { runs: Run[] }) {
               </td>
               <td>{date(run.created_at)}</td>
               <td>
-                {run.results.length} / {run.snapshot.steps.length}
+                {
+                  run.results.filter(
+                    (r) => r.status !== "failed" && r.status !== "running",
+                  ).length
+                }{" "}
+                / {run.snapshot.steps.length}
               </td>
               <td>
                 <Link className="text-link" href={`/runs/${run.id}`}>

@@ -26,7 +26,12 @@ export default async function RunPage({
       <div className="run-meta">
         <span className={`badge ${data.status}`}>{data.status}</span>
         <span>
-          {data.results.length} / {data.snapshot.steps.length} steps completed
+          {
+            data.results.filter(
+              (r) => r.status !== "failed" && r.status !== "running",
+            ).length
+          }{" "}
+          / {data.snapshot.steps.length} steps completed
         </span>
         {data.has_image && <span>Image input included</span>}
       </div>
@@ -102,7 +107,17 @@ export default async function RunPage({
                 <p className="eyebrow">ACTUAL PROMPT SENT TO THE MODEL</p>
                 <pre className="prompt">{result.prompt}</pre>
                 <p className="eyebrow">MODEL OUTPUT</p>
-                <pre className="prompt output">{result.output}</pre>
+                {result.status === "failed" ? (
+                  <p className="notice error">
+                    {result.error || "This model request failed."}
+                  </p>
+                ) : result.status === "running" ? (
+                  <p className="muted">
+                    No completed output was recorded for this attempt.
+                  </p>
+                ) : (
+                  <pre className="prompt output">{result.output}</pre>
+                )}
               </>
             ) : (
               <p className="muted">

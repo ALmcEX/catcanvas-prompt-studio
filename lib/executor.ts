@@ -28,21 +28,39 @@ export async function executeChain({
   for (const step of steps) {
     const prompt = resolvePrompt(step, steps, results, input);
     const start = Date.now();
-    const output = await generate({
-      prompt,
-      model: step.model,
-      image: step.use_image ? image : undefined,
-    });
-    if (!output.trim() || output.length > 16000)
-      throw new Error("The model returned empty or oversized output.");
-    results.push({
+    const attempt: StepResult = {
       id: step.id,
       name: step.name,
       prompt,
-      output,
+      output: "",
       model: step.model,
-      duration_ms: Date.now() - start,
-    });
+      duration_ms: 0,
+      status: "running",
+    };
+    results.push(attempt);
+    await onStep([...results]);
+    try {
+      const output = await generate({
+        prompt,
+        model: step.model,
+        image: step.use_image ? image : undefined,
+      });
+      if (!output.trim() || output.length > 16000)
+        throw new Error("The model returned empty or oversized output.");
+      Object.assign(attempt, {
+        output,
+        duration_ms: Date.now() - start,
+        status: "succeeded",
+      });
+    } catch (error) {
+      Object.assign(attempt, {
+        status: "failed",
+        error: error instanceof Error ? error.message : "Model request failed.",
+        duration_ms: Date.now() - start,
+      });
+      await onStep([...results]);
+      throw error;
+    }
     await onStep([...results]);
   }
   return results;

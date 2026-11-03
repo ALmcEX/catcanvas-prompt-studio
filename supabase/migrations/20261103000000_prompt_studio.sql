@@ -11,7 +11,7 @@ create table public.studio_steps (
 create table public.studio_runs (
  id uuid primary key default gen_random_uuid(),chain_id uuid not null references public.studio_chains(id),created_by uuid not null references public.profiles(id),
  snapshot jsonb not null, input text not null check(char_length(input) between 1 and 4000), has_image boolean not null default false,
- results jsonb not null default '[]' check(jsonb_typeof(results)='array' and octet_length(results::text)<=300000),
+ results jsonb not null default '[]' check(jsonb_typeof(results)='array' and octet_length(results::text)<=4194304),
  status text not null default 'running' check(status in ('running','succeeded','failed')),error text check(char_length(error)<=500),output_path text,
  created_at timestamptz not null default clock_timestamp(),updated_at timestamptz not null default clock_timestamp(),finished_at timestamptz);
 create index studio_runs_chain on public.studio_runs(chain_id,created_at desc);

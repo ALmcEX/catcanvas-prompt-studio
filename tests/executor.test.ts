@@ -54,7 +54,10 @@ it("retains finished steps and never calls subsequent steps after a failure", as
     }),
   ).rejects.toThrow("Provider unavailable");
   expect(calls).toBe(2);
-  expect(saved).toHaveLength(1);
+  expect(saved).toHaveLength(2);
+  expect(saved[1].prompt).toBe("Caption description");
+  expect(saved[1].status).toBe("failed");
+  expect(saved[1].error).toBe("Provider unavailable");
   expect(saved[0].output).toBe("description");
 });
 it("rejects empty output", async () => {
@@ -66,4 +69,21 @@ it("rejects empty output", async () => {
       onStep: async () => {},
     }),
   ).rejects.toThrow(/empty/);
+});
+
+it("persists the expanded prompt before a provider request starts", async () => {
+  let saved: StepResult[] = [];
+  await executeChain({
+    steps: [steps[0]],
+    input: "cat",
+    generate: async () => {
+      expect(saved[0].prompt).toBe("Describe cat");
+      expect(saved[0].status).toBe("running");
+      return "description";
+    },
+    onStep: async (results) => {
+      saved = structuredClone(results);
+    },
+  });
+  expect(saved[0].status).toBe("succeeded");
 });

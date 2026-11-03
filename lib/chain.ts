@@ -7,6 +7,8 @@ export type Step = {
   use_image: boolean;
 };
 export type StepResult = {
+  status?: "running" | "succeeded" | "failed";
+  error?: string;
   id: string;
   name: string;
   prompt: string;

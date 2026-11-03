@@ -31,6 +31,15 @@ do $$declare c uuid;s1 uuid;s2 uuid;r uuid;v integer;d jsonb;begin
  if (select deleted_at from public.studio_chains where id=c) is null then raise exception 'FAIL chain deletion';end if;
  begin perform public.studio_begin_run(c,'Deleted',false);raise exception 'FAIL deleted execution';exception when invalid_parameter_value then null;end;
 end $$;
+-- A valid long chain must retain every expanded prompt and output.
+do $$declare c uuid;r uuid;payload jsonb:='[]';i integer;begin
+ c:=(public.studio_mutate(null,null,'create','{"name":"Long history"}')->>'id')::uuid;
+ for i in 0..8 loop perform public.studio_mutate(c,i,'add_step','{"name":"Long step","prompt":"{{previous}}"}');end loop;
+ r:=(public.studio_begin_run(c,'Long input',false)->>'id')::uuid;
+ for i in 1..9 loop payload:=payload||jsonb_build_array(jsonb_build_object('prompt',repeat('字',40000),'output',repeat('字',16000),'status','succeeded'));end loop;
+ perform public.studio_run_progress(r,payload,'failed','Test completion',null);
+ if (select status from public.studio_runs where id=r)<>'failed' then raise exception 'FAIL long history finalization';end if;
+end $$;
 select set_config('request.jwt.claims','{"sub":"aa880000-0000-4000-8000-000000000002","role":"authenticated","app_metadata":{"provider":"google"},"amr":[{"method":"oauth"}]}',true);
 do $$begin
  if exists(select 1 from public.studio_chains) or exists(select 1 from public.studio_runs) then raise exception 'FAIL ordinary read';end if;
