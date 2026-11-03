@@ -14,10 +14,7 @@ create table storage.objects(id uuid primary key default gen_random_uuid(),bucke
 alter table storage.objects enable row level security;grant select,insert,update,delete on storage.objects to anon,authenticated,service_role;
 create function storage.foldername(text) returns text[] language sql immutable as $$select (string_to_array($1,'/'))[1:array_length(string_to_array($1,'/'),1)-1]$$;
 alter default privileges in schema public grant all on tables to anon,authenticated,service_role;`);
-for (const dir of [
-  "tests/fixtures/base",
-  "tests/fixtures/admin",
-])
+for (const dir of ["tests/fixtures/base", "tests/fixtures/admin"])
   for (const file of (await readdir(dir)).sort())
     await db.exec(await readFile(`${dir}/${file}`, "utf8"));
 for (const file of (await readdir("supabase/migrations")).sort())

@@ -11,7 +11,7 @@ An independent, Google-superadmin-only prompt chain editor and runner.
 
 ## Setup
 1. `npm ci`. Copy `.env.example` to `.env.local`; configure the existing Supabase project and Gemini API key. No service-role key is used.
-2. Apply `supabase/migrations/20261103000000_prompt_studio.sql` to the existing CatCanvas database, after its Assignment 6/7 migrations. It adds only studio tables, functions and private bucket policies.
+2. Apply both SQL files in `supabase/migrations/` in filename order to the existing CatCanvas database, after its Assignment 6/7 migrations. It adds only studio tables, functions and private bucket policies.
 3. Add the exact application `/auth/callback` URL to Supabase Authentication → URL Configuration.
 4. `npm run dev`. Sign in with an existing Google account whose profile has `is_superadmin = true`. Ordinary accounts receive Access denied; the app never promotes users.
 5. Deploy to a separate Vercel project. Configure the same three environment variables for the deployment. Disable Vercel Deployment Protection while retaining application authentication.

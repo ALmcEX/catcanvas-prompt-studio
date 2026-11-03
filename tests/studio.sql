@@ -2,9 +2,9 @@ begin;
 insert into auth.users(id,email,raw_app_meta_data) values
 ('aa880000-0000-4000-8000-000000000001','studio-admin@example.test','{"provider":"google"}'),
 ('aa880000-0000-4000-8000-000000000002','studio-member@example.test','{"provider":"google"}');
-insert into auth.identities(id,user_id,provider,identity_data) values
-(gen_random_uuid(),'aa880000-0000-4000-8000-000000000001','google','{}'),
-(gen_random_uuid(),'aa880000-0000-4000-8000-000000000002','google','{}');
+insert into auth.identities(id,user_id,provider_id,provider,identity_data) values
+(gen_random_uuid(),'aa880000-0000-4000-8000-000000000001','studio-test-admin','google','{}'),
+(gen_random_uuid(),'aa880000-0000-4000-8000-000000000002','studio-test-member','google','{}');
 update public.profiles set is_superadmin=true where id='aa880000-0000-4000-8000-000000000001';
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"aa880000-0000-4000-8000-000000000001","role":"authenticated","app_metadata":{"provider":"google"},"amr":[{"method":"oauth"}]}',true);
@@ -37,7 +37,8 @@ do $$declare c uuid;r uuid;payload jsonb:='[]';i integer;begin
  for i in 0..8 loop perform public.studio_mutate(c,i,'add_step','{"name":"Long step","prompt":"{{previous}}"}');end loop;
  r:=(public.studio_begin_run(c,'Long input',false)->>'id')::uuid;
  for i in 1..9 loop payload:=payload||jsonb_build_array(jsonb_build_object('prompt',repeat('字',40000),'output',repeat('字',16000),'status','succeeded'));end loop;
- perform public.studio_run_progress(r,payload,'failed','Test completion',null);
+ perform public.studio_run_progress(r,payload,'running',null,null);
+ perform public.studio_fail_run(r,'Finalization fallback');
  if (select status from public.studio_runs where id=r)<>'failed' then raise exception 'FAIL long history finalization';end if;
 end $$;
 select set_config('request.jwt.claims','{"sub":"aa880000-0000-4000-8000-000000000002","role":"authenticated","app_metadata":{"provider":"google"},"amr":[{"method":"oauth"}]}',true);

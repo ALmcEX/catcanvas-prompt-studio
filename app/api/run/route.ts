@@ -90,13 +90,25 @@ export async function POST(request: NextRequest) {
     const message =
       error instanceof Error ? error.message : "Generation failed. Try again.";
     if (run) {
-      await client.rpc("studio_run_progress", {
+      const { error: finalizeError } = await client.rpc("studio_run_progress", {
         p_run: run.id,
         p_results: results,
         p_status: "failed",
         p_error: message,
         p_output_path: null,
       });
+      if (finalizeError) {
+        const { error: fallbackError } = await client.rpc("studio_fail_run", {
+          p_run: run.id,
+          p_error: message,
+        });
+        if (fallbackError)
+          return NextResponse.json({
+            id: run.id,
+            warning:
+              "The database could not finalize this run. Check its saved progress before retrying.",
+          });
+      }
       return NextResponse.json({ id: run.id });
     }
     return NextResponse.json({ error: message }, { status: 400 });
