@@ -212,9 +212,10 @@ small {
 }
 .theme-picker {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 8px;
   font-size: 12px;
 }
 .theme-picker select {
@@ -281,7 +282,7 @@ small {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 24px;
+  gap: 14px;
 }
 .verified {
   color: var(--green);
@@ -881,7 +882,7 @@ td:first-child {
   }
   .topbar-actions {
     margin-left: auto;
-    gap: 12px;
+    gap: 8px;
   }
   .topbar-actions .verified {
     display: none;
