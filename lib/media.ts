@@ -1,14 +1,14 @@
 import sharp, { type OverlayOptions } from "sharp";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { parse, type Font } from "opentype.js";
+import opentype, { type Font } from "opentype.js";
 
 let fontPromise: Promise<Font> | undefined;
 function captionFont() {
   return (fontPromise ??= readFile(
     path.join(process.cwd(), "assets/fonts/NotoSans-Latin-Regular.woff"),
   ).then((bytes) =>
-    parse(
+    opentype.parse(
       bytes.buffer.slice(
         bytes.byteOffset,
         bytes.byteOffset + bytes.byteLength,
