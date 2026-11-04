@@ -8,6 +8,9 @@ export default async function Login({
   const { error } = await searchParams;
   return (
     <main className="login">
+      <div className="login-appearance">
+        <Theme />
+      </div>
       <section className="login-art">
         <div className="brand">
           <span className="brand-mark">c.</span>CatCanvas
@@ -49,7 +52,6 @@ export default async function Login({
           <br />
           Signing in does not grant administrator access.
         </p>
-        <Theme />
       </section>
     </main>
   );

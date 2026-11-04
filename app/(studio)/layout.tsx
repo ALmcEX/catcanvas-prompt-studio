@@ -22,7 +22,6 @@ export default async function StudioLayout({
         <p className="workspace-label">PROMPT STUDIO</p>
         <Nav />
         <div className="sidebar-bottom">
-          <Theme />
           <div className="identity">
             <span className="avatar">{name[0].toUpperCase()}</span>
             <div>
@@ -42,7 +41,10 @@ export default async function StudioLayout({
           <span>
             WORKSPACE <span className="muted">/</span> Prompt Studio
           </span>
-          <span className="verified">● Google session verified</span>
+          <div className="topbar-actions">
+            <span className="verified">● Google session verified</span>
+            <Theme />
+          </div>
         </header>
         <main className="content">{children}</main>
         <footer>
