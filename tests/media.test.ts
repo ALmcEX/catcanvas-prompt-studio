@@ -21,3 +21,12 @@ it("renders real downloadable PNG media from arbitrary escaped model output", as
   expect(meta.width).toBe(1200);
   expect(meta.height).toBeGreaterThan(300);
 });
+
+it("draws caption glyph outlines so server font availability cannot change the PNG", async () => {
+  const { mediaSvg } = await import("../lib/media");
+  const svg = await mediaSvg("A chain", "Five readable captions <&>", false);
+  expect(svg).not.toContain("<text");
+  expect(svg.match(/<path /g)?.length).toBeGreaterThan(3);
+  const result = await sharp(Buffer.from(svg)).png().toBuffer();
+  expect((await sharp(result).metadata()).width).toBe(1200);
+});
