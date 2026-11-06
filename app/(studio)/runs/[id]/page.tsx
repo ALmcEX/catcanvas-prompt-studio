@@ -21,7 +21,7 @@ export default async function RunPage({
       </Link>
       <Heading
         title="Follow the thought"
-        description={`Run started ${date(data.created_at)}`}
+        description={`Run started ${date(data.created_at)} · ${data.snapshot.chain.name}`}
       />
       <div className="run-meta">
         <span className={`badge ${data.status}`}>{data.status}</span>
