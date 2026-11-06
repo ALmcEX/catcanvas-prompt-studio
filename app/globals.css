@@ -156,7 +156,7 @@ small {
   font-size: 9px;
   letter-spacing: 2.1px;
   color: #9fae9f;
-  margin: 18px 0 40px 47px;
+  margin: 18px 0 40px;
 }
 .nav {
   flex: 1;
@@ -174,22 +174,11 @@ small {
 .nav summary::-webkit-details-marker {
   display: none;
 }
-.nav > a > span,
-.nav summary > span:first-child {
-  font-size: 21px;
-  width: 23px;
-}
 .nav [aria-current],
 .nav summary:hover,
 .nav > a:hover {
   background: #38463a;
   color: #f4c49e;
-}
-.chevron {
-  margin-left: auto;
-}
-.nav details[open] .chevron {
-  transform: rotate(90deg);
 }
 .subnav {
   border-left: 1px solid #4d5d50;
@@ -250,7 +239,8 @@ small {
   background: none;
   color: inherit;
   border: 0;
-  font-size: 23px;
+  font-size: 12px;
+  cursor: pointer;
 }
 .avatar {
   width: 34px;

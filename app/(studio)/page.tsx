@@ -65,15 +65,15 @@ export default async function Overview({
         </div>
         {all.length ? (
           <div className="chain-grid">
-            {all.slice(0, 4).map((c) => (
+            {all.slice(0, 4).map((c, index) => (
               <Link className="chain-card" key={c.id} href={`/chains/${c.id}`}>
-                <span className="eyebrow">PROMPT CHAIN</span>
+                <span className="eyebrow">Prompt chain {index + 1}</span>
                 <h3>{c.name} ↗</h3>
                 <p className="muted">
                   {c.description ||
                     "Open this chain to view its full prompts and steps."}
                 </p>
-                <small>Version {c.version + 1}</small>
+                <small>Saved revision {c.version + 1}</small>
               </Link>
             ))}
           </div>

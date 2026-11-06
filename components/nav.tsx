@@ -6,15 +6,10 @@ export function Nav() {
   return (
     <nav className="nav" aria-label="Studio navigation">
       <Link href="/" aria-current={path === "/" ? "page" : undefined}>
-        <span aria-hidden>◫</span> Overview
+        Overview
       </Link>
       <details open={path.startsWith("/chains")}>
-        <summary>
-          <span aria-hidden>↳</span> Prompt chains{" "}
-          <span className="chevron" aria-hidden>
-            ›
-          </span>
-        </summary>
+        <summary>Prompt chains</summary>
         <div className="subnav">
           <Link
             href="/chains"
@@ -26,12 +21,7 @@ export function Nav() {
         </div>
       </details>
       <details open={path.startsWith("/runs") || path.startsWith("/media")}>
-        <summary>
-          <span aria-hidden>▧</span> Results{" "}
-          <span className="chevron" aria-hidden>
-            ›
-          </span>
-        </summary>
+        <summary>Results</summary>
         <div className="subnav">
           <Link
             href="/runs"

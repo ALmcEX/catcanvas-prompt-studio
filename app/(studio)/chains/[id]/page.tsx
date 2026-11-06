@@ -66,7 +66,7 @@ export default async function ChainPage({
           <section className="panel">
             <details>
               <summary className="create-summary">
-                Chain settings · Version {c.version + 1}
+                Chain settings · Saved revision {c.version + 1}
               </summary>
               <form action={saveChain} className="stack form-width">
                 <Fields id={id} version={c.version} />

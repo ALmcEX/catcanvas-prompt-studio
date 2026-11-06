@@ -17,20 +17,19 @@ export default async function StudioLayout({
     <div className="shell">
       <aside className="sidebar">
         <Link className="brand" href="/">
-          <span className="brand-mark">c.</span>CatCanvas
+          CatCanvas
         </Link>
         <p className="workspace-label">PROMPT STUDIO</p>
         <Nav />
         <div className="sidebar-bottom">
           <div className="identity">
-            <span className="avatar">{name[0].toUpperCase()}</span>
             <div>
               <strong>{name}</strong>
               <small>Superadmin</small>
             </div>
             <form action={logout}>
               <button aria-label="Sign out" title="Sign out">
-                ↪
+                Sign out
               </button>
             </form>
           </div>

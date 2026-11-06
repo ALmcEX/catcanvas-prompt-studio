@@ -65,10 +65,12 @@ export default async function Chains({
         <div className="chain-grid">
           {filtered.map((c) => (
             <Link href={`/chains/${c.id}`} key={c.id} className="chain-card">
-              <span className="eyebrow">PROMPT CHAIN</span>
+              <span className="eyebrow">
+                Prompt chain {all.findIndex((chain) => chain.id === c.id) + 1}
+              </span>
               <h2>{c.name} ↗</h2>
               <p className="muted">{c.description || "No description yet."}</p>
-              <small>Version {c.version + 1} · View full prompts</small>
+              <small>Saved revision {c.version + 1} · View full prompts</small>
             </Link>
           ))}
         </div>
